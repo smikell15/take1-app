@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
+  password  String
+  createdAt DateTime   @default(now())
+  auditions Audition[]
+  pieces    Piece[]
+}
+
+model Piece {
+  id        Int             @id @default(autoincrement())
+  title     String
+  type      String
+  style     String?
+  voicePart String?
+  notes     String?
+  lastUsed  DateTime?
+  userId    Int
+  user      User            @relation(fields: [userId], references: [id])
+  auditions AuditionPiece[]
+}
+
+model Audition {
+  id      Int             @id @default(autoincrement())
+  show    String
+  role    String
+  date    DateTime
+  notes   String?
+  outcome String?
+  tags    String[]
+  userId  Int
+  user    User            @relation(fields: [userId], references: [id])
+  pieces  AuditionPiece[]
+}
+
+model AuditionPiece {
+  id         Int      @id @default(autoincrement())
+  auditionId Int
+  pieceId    Int
+  audition   Audition @relation(fields: [auditionId], references: [id])
+  piece      Piece    @relation(fields: [pieceId], references: [id])
+}
