@@ -22,6 +22,8 @@ model Piece {
   type      String
   style     String?
   voicePart String?
+  character String?
+  show      String?
   notes     String?
   lastUsed  DateTime?
   userId    Int

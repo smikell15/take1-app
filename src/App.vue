@@ -1,10 +1,17 @@
 <script setup lang="ts">
 import Navigation from './components/Navigation.vue'
+import { ref, onMounted } from 'vue'
+
+const isLoggedIn = ref(false)
+
+onMounted(() => {
+  isLoggedIn.value = !!localStorage.getItem('token')
+})
 </script>
 
 <template>
   <div>
-    <Navigation />
+    <Navigation v-if="isLoggedIn" />
     <router-view />
   </div>
 </template>

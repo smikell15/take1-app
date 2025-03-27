@@ -13,9 +13,22 @@
 </template>
   
   <script setup lang="ts">
-    import { useAuditionStore } from '@/stores/auditionStore'
+    import { useAuditionStore } from '../stores/auditionStore'
+    import { onMounted } from 'vue'
+    import { useRouter } from 'vue-router'
+
+    const router = useRouter()
 
     const auditionStore = useAuditionStore()
+
+    onMounted(() => {
+      const token = localStorage.getItem('token')
+      if (!token) {
+        router.push('/login')
+        } else {
+          //auditionStore.fetchAuditions()
+        }
+    })
 
     function submitAudition() {
       auditionStore.addAudition('Hairspray', 'Seaweed J. Stubbs')
