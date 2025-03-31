@@ -10,7 +10,8 @@ export const usePieceStore = defineStore('piece', {
       this.loading = true
       const res = await fetch('http://localhost:4000/api/pieces', {
         headers: {
-          //Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       })
       this.pieces = await res.json()
@@ -21,7 +22,7 @@ export const usePieceStore = defineStore('piece', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          //Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
         body: JSON.stringify(piece),
       })
@@ -32,7 +33,7 @@ export const usePieceStore = defineStore('piece', {
       await fetch(`http://localhost:4000/api/pieces/${id}`, {
         method: 'DELETE',
         headers: {
-          //Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       })
       this.pieces = this.pieces.filter(p => p.id !== id)
@@ -41,7 +42,7 @@ export const usePieceStore = defineStore('piece', {
       const res = await fetch(`http://localhost:4000/api/pieces/${id}/mark-used`, {
         method: 'PATCH',
         headers: {
-          //Authorization: `Bearer ${localStorage.getItem('token')}`,
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       })
       const updated = await res.json()

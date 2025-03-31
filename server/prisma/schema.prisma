@@ -32,16 +32,17 @@ model Piece {
 }
 
 model Audition {
-  id      Int             @id @default(autoincrement())
-  show    String
-  role    String
-  date    DateTime
-  notes   String?
-  outcome String?
-  tags    String[]
-  userId  Int
-  user    User            @relation(fields: [userId], references: [id])
-  pieces  AuditionPiece[]
+  id       Int             @id @default(autoincrement())
+  show     String
+  role     String
+  date     DateTime
+  notes    String?
+  callback String?
+  outcome  String?
+  tags     String[]
+  userId   Int
+  user     User            @relation(fields: [userId], references: [id])
+  pieces   AuditionPiece[]
 }
 
 model AuditionPiece {

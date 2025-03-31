@@ -1,31 +1,41 @@
 import express from 'express'
 import { PrismaClient } from '@prisma/client'
-//TODO: import { authenticateToken } from '../middleware/auth'
+import { authenticateToken } from '../middleware/auth'
 
 const router = express.Router()
 const prisma = new PrismaClient()
 
 // GET all pieces for user
-router.get('/', async (req, res) => {
+router.get('/', authenticateToken, async (req, res) => {
     // @ts-ignore
-    const userId = 1
-    const pieces = await prisma.piece.findMany({
-        where: { userId }
-    })
+    const userId = req.user.id
 
+    if (!userId) {
+        res.status(401).json({ error: 'Unauthorized – missing user ID' })
+        return
+      }
+    const pieces = await prisma.piece.findMany({
+      where: { userId },
+      orderBy: { lastUsed: 'desc' }
+    })
     res.json(pieces)
-})
+  })
 
 // POST a new piece
-router.post('/', async (req, res) => {
+router.post('/', authenticateToken, async (req, res) => {
     const { title, type, style, voicePart, character, show, notes } = req.body
     // @ts-ignore
-    const userId = 1
+    const userId = req.user.id
 
     if (!title || !type) {
         res.status(400).json({ error: 'Title and type are required' })
         return
     }
+
+    if (!userId) {
+        res.status(401).json({ error: 'Unauthorized – missing user ID' })
+        return
+      }
 
     const piece = await prisma.piece.create({
         data: {
@@ -44,14 +54,19 @@ router.post('/', async (req, res) => {
 })
 
 // DELETE a piece
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authenticateToken, async (req, res) => {
     const id = parseInt(req.params.id, 10); // Convert id to a number
     if (isNaN(id)) {
         res.status(400).json({ error: 'Invalid piece ID' });
         return;
     }
     // @ts-ignore
-    const userId = 1
+    const userId = req.user.id
+
+    if (!userId) {
+        res.status(401).json({ error: 'Unauthorized – missing user ID' })
+        return
+      }
 
     const piece = await prisma.piece.findUnique({
         where: { id }
@@ -70,10 +85,15 @@ router.delete('/:id', async (req, res) => {
 })
 
 // PATCH /api/pieces/:id/mark-used
-router.patch('/:id/mark-used', async (req, res) => {
+router.patch('/:id/mark-used', authenticateToken, async (req, res) => {
     const pieceId = parseInt(req.params.id)
     // @ts-ignore
-    const userId = 1
+    const userId = req.user.id
+
+    if (!userId) {
+        res.status(401).json({ error: 'Unauthorized – missing user ID' })
+        return
+      }
   
     const piece = await prisma.piece.findUnique({ where: { id: pieceId } })
   

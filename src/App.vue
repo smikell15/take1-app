@@ -7,6 +7,7 @@ const isLoggedIn = ref(false)
 onMounted(() => {
   isLoggedIn.value = !!localStorage.getItem('token')
 })
+
 </script>
 
 <template>

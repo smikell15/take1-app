@@ -59,6 +59,11 @@ const login = async () => {
         Log In
       </button>
 
+      <p class="text-sm text-center text-gray-600 mt-4">
+        Don't have an account?
+        <RouterLink to="/register" class="text-blue-600 hover:underline">Register here</RouterLink>
+      </p>
+
       <p v-if="error" class="text-sm text-red-500 mt-2 text-center">{{ error }}</p>
     </form>
   </div>

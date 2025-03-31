@@ -46,5 +46,13 @@ onMounted(() => {
   .bg-blue-600:hover {
     @apply bg-blue-700;
   }
+
+  .bg-green-600 {
+    @apply bg-green-600;
+  }
+
+  .bg-green-600:hover {
+    @apply bg-green-700
+  }
 </style>
   
